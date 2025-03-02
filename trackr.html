@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Visitor Tracker</title>
+</head>
+<body>
+  <h1>Welcome to My Website</h1>
+  <p>This page tracks visitor info and logs it to Google Sheets.</p>
+
+  <script>
+    window.addEventListener('load', function() {
+      // Collect visitor information
+      const data = {
+        page: window.location.pathname || '/trackr.html',         // Current page
+        browser: navigator.userAgent || 'Unknown',               // Browser details
+        os: navigator.platform || 'Unknown',                     // Operating system
+        device: /Mobi/.test(navigator.userAgent) ? 'Mobile' : 'Desktop', // Device type
+        referrer: document.referrer || 'Direct'                  // Where the visitor came from
+      };
+
+      // Send data to Google Apps Script web app
+      fetch('https://script.google.com/macros/s/AKfycbz07_aDMPGJZiHzYq_L9WIiYi1sFLyRGyPV_lTdLtH_pcPlBvKnH3CpCQq3UH3_9iT-/exec', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      })
+      .then(response => response.text())
+      .then(result => console.log('Logged:', result))
+      .catch(error => console.error('Error:', error));
+    });
+  </script>
+</body>
+</html>
